@@ -14,6 +14,7 @@
 		875E75F5277F739700BCF539 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 875E75F4277F739700BCF539 /* LoginView.swift */; };
 		87BE31112791D1E800F9E327 /* OnboardingContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BE31102791D1E800F9E327 /* OnboardingContainerViewController.swift */; };
 		87BE31132792980200F9E327 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BE31122792980200F9E327 /* OnboardingViewController.swift */; };
+		87BE31162792A84E00F9E327 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BE31152792A84E00F9E327 /* Constant.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		875E75F4277F739700BCF539 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		87BE31102791D1E800F9E327 /* OnboardingContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContainerViewController.swift; sourceTree = "<group>"; };
 		87BE31122792980200F9E327 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		87BE31152792A84E00F9E327 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 		875E75DA277F6FE900BCF539 /* BankeyDemoApp */ = {
 			isa = PBXGroup;
 			children = (
+				87BE31142792A82C00F9E327 /* Constant */,
 				87BE310F2791D13100F9E327 /* Onboarding */,
 				875E75F2277F72E800BCF539 /* Files */,
 				875E75F3277F734900BCF539 /* Login */,
@@ -92,6 +95,14 @@
 				87BE31122792980200F9E327 /* OnboardingViewController.swift */,
 			);
 			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		87BE31142792A82C00F9E327 /* Constant */ = {
+			isa = PBXGroup;
+			children = (
+				87BE31152792A84E00F9E327 /* Constant.swift */,
+			);
+			path = Constant;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -168,6 +179,7 @@
 				87BE31132792980200F9E327 /* OnboardingViewController.swift in Sources */,
 				875E75DC277F6FE900BCF539 /* AppDelegate.swift in Sources */,
 				87BE31112791D1E800F9E327 /* OnboardingContainerViewController.swift in Sources */,
+				87BE31162792A84E00F9E327 /* Constant.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
