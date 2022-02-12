@@ -7,12 +7,25 @@
 
 import UIKit
 
+protocol LogOutDelegate: AnyObject {
+    func didLogout()
+}
+
+protocol LoginViewControllerDelegate:AnyObject {
+    func didLogin()
+}
+
+
 class LoginViewController: UIViewController {
 
     var loginView = LoginView()
     let signInButton = UIButton(type: .system)
     let errorMessageLabel = UILabel()
+    let stackView = UIStackView()
+    let titleLabel = UILabel()
+    let descriptionLabel = UILabel()
     
+    weak var delegate: LoginViewControllerDelegate?
     var username: String? {
         return loginView.userNameTextField.text
     }
@@ -26,6 +39,10 @@ class LoginViewController: UIViewController {
         // Do any additional setup after loading the view.
         style()
         layout()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        signInButton.configuration?.showsActivityIndicator = false
     }
 
 
@@ -44,11 +61,43 @@ extension LoginViewController {
         errorMessageLabel.textColor = .systemRed
         errorMessageLabel.numberOfLines = 0
         errorMessageLabel.isHidden = true
+        
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+    
+        
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.textAlignment = .center
+        titleLabel.font = UIFont.preferredFont(forTextStyle: .title1)
+        titleLabel.numberOfLines = 0
+        titleLabel.text = "Demo App"
+        
+        
+        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        descriptionLabel.textAlignment = .center
+        descriptionLabel.font = UIFont.preferredFont(forTextStyle: .title3)
+        descriptionLabel.numberOfLines = 0
+        descriptionLabel.text = "This is description about Demo App"
+        
+        
+        
     }
     private func layout(){
+        stackView.addArrangedSubview(titleLabel)
+        stackView.addArrangedSubview(descriptionLabel)
+        view.addSubview(stackView)
+        
         view.addSubview(loginView)
         view.addSubview(signInButton)
         view.addSubview(errorMessageLabel)
+        
+        NSLayoutConstraint.activate([
+            stackView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1),
+            view.trailingAnchor.constraint(equalToSystemSpacingAfter: stackView.trailingAnchor, multiplier: 1),
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100),
+            stackView.bottomAnchor.constraint(equalTo: loginView.topAnchor, constant: -20)
+        
+        ])
         
         NSLayoutConstraint.activate([
             loginView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -84,13 +133,14 @@ extension LoginViewController {
             return
         }
         
-        if ((username.isEmpty) || (password.isEmpty)) {
-            configureView(withMessage: "Username / Password Can not be blank.")
-            return
-        }
+//        if ((username.isEmpty) || (password.isEmpty)) {
+//            configureView(withMessage: "Username / Password Can not be blank.")
+//            return
+//        }
         
-        if ((username == "Mahesh") && (password == "Welcome")){
+        if ((username == "") && (password == "")){
             signInButton.configuration?.showsActivityIndicator = true
+            delegate?.didLogin()
         } else {
             configureView(withMessage: "Incorrect username / password")
         }
