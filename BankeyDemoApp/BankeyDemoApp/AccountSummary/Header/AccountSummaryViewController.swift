@@ -9,20 +9,20 @@
 import UIKit
 
 class AccountSummaryViewController: UIViewController {
-    
-    let games = [
-        "Pacman",
-        "Space Invaders",
-        "Space Patrol",
-    ]
-    
     var tableView = UITableView()
     
     var accounts = [AccountSummaryCell.ViewModel]()
     
+    lazy var logoutBarButtonItem: UIBarButtonItem = {
+        let barButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logOutTapped))
+        barButtonItem.tintColor = .label
+        return barButtonItem
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        setUpNavigationBar()
     }
 }
 
@@ -115,4 +115,16 @@ extension AccountSummaryViewController {
     }
     
     
+}
+
+extension AccountSummaryViewController {
+    
+    
+    private func setUpNavigationBar() {
+        navigationItem.rightBarButtonItem = logoutBarButtonItem
+    }
+    
+    @objc func logOutTapped(sender: UIButton) {
+        NotificationCenter.default.post(name: .logout, object: nil)
+    }
 }

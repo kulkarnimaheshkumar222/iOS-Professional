@@ -67,15 +67,16 @@ extension AccountSummaryCell {
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = UIFont.preferredFont(forTextStyle: .body)
         nameLabel.adjustsFontForContentSizeCategory = true
+        nameLabel.adjustsFontSizeToFitWidth = true
         nameLabel.text = "Account Name"
         contentView.addSubview(nameLabel)
         
         balanceLabel.translatesAutoresizingMaskIntoConstraints = false
         balanceLabel.text = "Some Balance"
         balanceLabel.textAlignment = .right
+        balanceLabel.adjustsFontSizeToFitWidth = true
         
         balanceAmountLabel.translatesAutoresizingMaskIntoConstraints = false
-      //  balanceAmountLabel.attributedText = CurrencyFormatter().breakIntoDollarsAndCents(<#T##amount: Decimal##Decimal#>)
         balanceAmountLabel.textAlignment = .right
         
         balanceStackView.translatesAutoresizingMaskIntoConstraints = false
