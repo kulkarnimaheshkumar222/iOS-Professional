@@ -21,8 +21,9 @@ class AccountSummaryViewController: UIViewController {
     //Components
     var accountCellViewModels: [AccountSummaryCell.ViewModel] = []
     var headerView = AccountSummaryHeaderView(frame: .zero)
-    
     let refreshControl = UIRefreshControl()
+    
+    var isLoaded = false
     
     lazy var logoutBarButtonItem: UIBarButtonItem = {
         let barButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logOutTapped))
@@ -43,6 +44,7 @@ extension AccountSummaryViewController {
         setupTableView()
         setupTableHeaderView()
         setUpRefreshControl()
+        setUpSkeleton()
         fetchData()
         
     }
@@ -53,6 +55,7 @@ extension AccountSummaryViewController {
         tableView.backgroundColor = appColor
         
         tableView.register(AccountSummaryCell.self, forCellReuseIdentifier: AccountSummaryCell.cellIdentifier)
+        tableView.register(SkeletonCell.self, forCellReuseIdentifier: SkeletonCell.cellIdentifier)
         tableView.rowHeight = AccountSummaryCell.rowHeight
         tableView.tableFooterView = UIView()
         
@@ -79,18 +82,31 @@ extension AccountSummaryViewController {
         refreshControl.addTarget(self, action: #selector(refreshContent), for: .valueChanged)
         tableView.refreshControl = refreshControl
     }
-    
+    func setUpSkeleton() {
+        let row = Account.makeSkeleton()
+        accounts = Array(repeating: row, count: 10)
+        configureTableCells(with: accounts)
+    }
 }
 
 extension AccountSummaryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        guard !accountCellViewModels.isEmpty else {return UITableViewCell()}
+        let account = accountCellViewModels[indexPath.row]
+        if isLoaded {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AccountSummaryCell.cellIdentifier, for: indexPath) as? AccountSummaryCell else {
             return UITableViewCell()
         }
         cell.selectionStyle = .none
-        let viewModel = accountCellViewModels[indexPath.row]
-        cell.configure(with: viewModel)
+        cell.configure(with: account)
         return cell
+        }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: SkeletonCell.cellIdentifier, for: indexPath) as? SkeletonCell else {
+            return UITableViewCell()
+        }
+        return cell
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -116,8 +132,6 @@ extension AccountSummaryViewController {
             switch result {
             case .success(let profile):
                 self.profile = profile
-                self.configureTableHeaderView(with: profile)
-                self.tableView.reloadData()
             case .failure(let error):
                 print(error.localizedDescription)
             }
@@ -129,8 +143,6 @@ extension AccountSummaryViewController {
             switch result {
             case .success(let accounts):
                 self.accounts = accounts
-                self.configureTableCells(with: accounts)
-                self.tableView.reloadData()
             case .failure(let error):
                 print(error.localizedDescription)
             }
@@ -138,7 +150,13 @@ extension AccountSummaryViewController {
         }
         
         group.notify(queue: .main) {
+            self.tableView.refreshControl?.endRefreshing()
+            
+            guard let profile = self.profile else {return}
+            self.isLoaded = true
             self.tableView.reloadData()
+            self.configureTableHeaderView(with: profile)
+            self.configureTableCells(with: self.accounts)
             self.tableView.refreshControl?.endRefreshing()
         }
         
@@ -173,6 +191,14 @@ extension AccountSummaryViewController {
     }
     
     @objc func refreshContent() {
+        reset()
+        setUpSkeleton()
+        tableView.reloadData()
         fetchData()
+    }
+    func reset() {
+        profile = nil
+        accounts = []
+        isLoaded = false
     }
 }
