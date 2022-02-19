@@ -11,7 +11,23 @@ class AccountSummaryHeaderView: UIView {
     
     @IBOutlet var contentView: UIView!
     
+    @IBOutlet var welcomeLbl: UILabel!
+    
+    @IBOutlet var nameLbl: UILabel!
+    
+    @IBOutlet var dateLbl: UILabel!
+    
     var shakeyBellView = ShakeyBellView()
+    
+    struct ViewModel {
+        let welcomeMessage: String
+        let name: String
+        let date: Date
+        
+        var dateFormatted: String {
+            return date.monthDayYearString
+        }
+    }
     
     override init(frame: CGRect) {
            super.init(frame: frame)
@@ -52,5 +68,12 @@ class AccountSummaryHeaderView: UIView {
         
         ])
         
+    }
+    
+    func configure(viewModel: ViewModel) {
+        
+        welcomeLbl.text = viewModel.welcomeMessage
+        nameLbl.text = viewModel.name
+        dateLbl.text = viewModel.dateFormatted
     }
 }
