@@ -133,7 +133,8 @@ extension AccountSummaryViewController {
             case .success(let profile):
                 self.profile = profile
             case .failure(let error):
-                print(error.localizedDescription)
+                self.displayError(error: error)
+               
             }
             group.leave()
         }
@@ -144,7 +145,7 @@ extension AccountSummaryViewController {
             case .success(let accounts):
                 self.accounts = accounts
             case .failure(let error):
-                print(error.localizedDescription)
+                self.displayError(error: error)
             }
             group.leave()
         }
@@ -175,6 +176,25 @@ extension AccountSummaryViewController {
                                          balance: account.amount)
         })
     }
+    private func showErrorAlert(title: String , message: String) {
+        let alert = UIAlertController(title:title ,
+                                      message: message,
+                                      preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func displayError(error: NetworkError) {
+        switch error {
+        case .serverError:
+            self.showErrorAlert(title: Constant.server_title_error.rawValue, message: Constant.server_message_error.rawValue)
+        case .decodingError:
+            self.showErrorAlert(title: Constant.decoding_title_error.rawValue, message: Constant.decoding_message_error.rawValue)
+        }
+    }
+
 }
 
 
