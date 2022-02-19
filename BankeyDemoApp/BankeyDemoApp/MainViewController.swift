@@ -14,6 +14,9 @@ class MainViewController: UITabBarController {
         super.viewDidLoad()
         setupViews()
         setupTabBar()
+        print("change 1")
+        print("change 2")
+        print("change 3")
     }
 
     private func setupViews() {
