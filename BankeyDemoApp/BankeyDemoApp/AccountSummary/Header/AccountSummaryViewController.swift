@@ -30,15 +30,16 @@ class AccountSummaryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        setUpNavigationBar()
+       
     }
 }
 
 extension AccountSummaryViewController {
     private func setup() {
+        setUpNavigationBar()
         setupTableView()
         setupTableHeaderView()
-        fetchDataAndLoadViews()
+        fetchData()
         
     }
     
@@ -94,8 +95,11 @@ extension AccountSummaryViewController: UITableViewDelegate {
 
 extension AccountSummaryViewController {
     
-    private func fetchDataAndLoadViews() {
+    private func fetchData() {
         
+        let group = DispatchGroup()
+        
+        group.enter()
         fetchProfile(forUserId: "1") { result in
             switch result {
             case .success(let profile):
@@ -105,8 +109,10 @@ extension AccountSummaryViewController {
             case .failure(let error):
                 print(error.localizedDescription)
             }
+            group.leave()
         }
         
+        group.enter()
         fetchAccounts(forUserId: "1") { result in
             switch result {
             case .success(let accounts):
@@ -116,6 +122,11 @@ extension AccountSummaryViewController {
             case .failure(let error):
                 print(error.localizedDescription)
             }
+            group.leave()
+        }
+        
+        group.notify(queue: .main) {
+            self.tableView.reloadData()
         }
         
     }
@@ -139,7 +150,6 @@ extension AccountSummaryViewController {
 
 
 extension AccountSummaryViewController {
-    
     
     private func setUpNavigationBar() {
         navigationItem.rightBarButtonItem = logoutBarButtonItem
